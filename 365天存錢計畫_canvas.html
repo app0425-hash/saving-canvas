@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>365 天存錢計畫</title>
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
+  background:#fff; color:#000; padding:20px;
+}
+h1{text-align:center;}
+.total{text-align:center;font-size:18px;margin-bottom:20px;}
+table{
+  width:100%; border-collapse:separate; border-spacing:0;
+  border-radius:12px; overflow:hidden; border:1px solid #000;
+}
+th,td{padding:8px;text-align:center;border-bottom:1px solid #000;font-size:14px;}
+th{background:#000;color:#fff;}
+tr.saved{background:#e5e5e5;}
+tr:last-child td{border-bottom:none;}
+input[type=number]{width:80px;border:1px solid #000;border-radius:6px;text-align:center;}
+input[type=checkbox]{transform:scale(1.2);}
+</style>
+</head>
+<body>
+
+<h1>365 天存錢計畫</h1>
+<div class="total">目前已存金額：<strong><span id="total">0</span></strong></div>
+
+<table>
+<thead>
+<tr><th>Day</th><th>存錢金額</th><th>完成</th></tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+
+<script>
+const tbody=document.getElementById("tableBody");
+const totalEl=document.getElementById("total");
+
+for(let i=1;i<=365;i++){
+  const tr=document.createElement("tr");
+  tr.innerHTML=`
+    <td>${i}</td>
+    <td><input type="number" min="0"></td>
+    <td><input type="checkbox"></td>`;
+  const checkbox=tr.querySelector("input[type=checkbox]");
+  checkbox.addEventListener("change",()=>{
+    tr.classList.toggle("saved",checkbox.checked);
+    calc();
+  });
+  tr.querySelector("input[type=number]").addEventListener("input",calc);
+  tbody.appendChild(tr);
+}
+function calc(){
+  let sum=0;
+  document.querySelectorAll("tbody tr").forEach(r=>{
+    if(r.querySelector("input[type=checkbox]").checked){
+      sum+=Number(r.querySelector("input[type=number]").value)||0;
+    }
+  });
+  totalEl.textContent=sum.toLocaleString();
+}
+</script>
+
+</body>
+</html>
